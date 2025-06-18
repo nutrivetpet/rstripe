@@ -12,3 +12,23 @@ get_api_key <- function(mode = c("test", "live")) {
   }
   key
 }
+
+build_req <- function(api_key, endpoint) {
+  stopifnot(
+    is_scalar_character(api_key),
+    is_scalar_character(endpoint)
+  )
+
+  request("https://api.stripe.com/v1") |>
+    req_url_path_append(endpoint) |>
+    req_auth_basic(username = api_key, password = "")
+}
+
+is_null <- function(x) {
+  is.null(x)
+}
+
+convert_stripe_amount_to_decimal <- function(x) {
+  stopifnot(rlang::is_integer(x))
+  x / 100L
+}

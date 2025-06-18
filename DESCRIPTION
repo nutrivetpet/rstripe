@@ -11,5 +11,9 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports: 
+    dplyr,
     httr2,
+    lubridate,
     rlang
+Suggests: 
+    tibble
