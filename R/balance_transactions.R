@@ -17,14 +17,14 @@
 #' @examples
 #' \dontrun{
 #' # Fetch test mode balance transactions
-#' test_transactions <- fetch_balance_transactions("test")
+#' test_transactions <- list_balance_transactions("test")
 #'
 #' # Fetch live mode balance transactions
-#' live_transactions <- fetch_balance_transactions("live")
+#' live_transactions <- list_balance_transactions("live")
 #' }
 #'
 #' @export
-fetch_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
+list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
   mode <- arg_match(mode, mode)
   stopifnot((limit >= 1L && limit <= 100L) || is.infinite(limit))
 
