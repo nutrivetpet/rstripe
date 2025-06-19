@@ -2,5 +2,6 @@
 
 export(get_stripe_endpoints)
 export(list_balance_transactions)
+export(list_charges)
 import(httr2)
 import(rlang)
