@@ -46,10 +46,6 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
     on_error = "return" # error objects are stored at the end
   )
 
-  if (!is_installed("vctrs")) {
-    abort("`resps_data()` requires the {vctrs} package to be installed.")
-  }
-
   resps_successes_dat <- xtr_data(resps)
 
   dat <- as_tibble_if_inst(resps_successes_dat)

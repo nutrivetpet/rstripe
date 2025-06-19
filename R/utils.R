@@ -56,6 +56,9 @@ as_tibble_if_inst <- function(dat) {
 
 xtr_data <- function(resps) {
   stopifnot(is.list(resps)) # TODO: more checks
+  if (!is_installed("vctrs")) {
+    abort("`resps_data()` requires the {vctrs} package to be installed.")
+  }
   successes <- resps_successes(resps)
   resps_data(
     successes,
