@@ -52,39 +52,7 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
 
   resps_failures <- resps_failures(resps)
 
-  if (length(resps_failures)) {
-    errors <- sapply(
-      # can return NULL
-      resps_failures,
-      `[[`,
-      "status"
-    )
-    statuses <- unlist(Filter(
-      function(x) is_scalar_integerish(x, finite = TRUE),
-      errors
-    ))
-
-    others <- Filter(
-      function(x) !is_scalar_integerish(x, finite = TRUE),
-      errors
-    )
-
-    if (length(statuses)) {
-      msgs <- vapply(
-        statuses,
-        \(x) get_error_msg(x),
-        FUN.VALUE = character(length(statuses))
-      )
-      abort(
-        c("API Error(s)!", set_names(msgs, "x")),
-        class = "stripe_api_error"
-      )
-    }
-
-    if (length(others)) {
-      abort("%s of non API related errors encountered.", length(others))
-    }
-  }
+  throw_errors(resps_failures)
 
   cols <- get_balance_transactions_cols()
   missing_cols <- setdiff(
