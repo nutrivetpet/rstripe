@@ -53,3 +53,15 @@ as_tibble_if_inst <- function(dat) {
   }
   dat
 }
+
+xtr_data <- function(resps) {
+  stopifnot(is.list(resps)) # TODO: more checks
+  successes <- resps_successes(resps)
+  resps_data(
+    successes,
+    function(resp) {
+      out <- resp_body_json(resp, simplifyVector = TRUE)
+      out[["data"]]
+    }
+  )
+}

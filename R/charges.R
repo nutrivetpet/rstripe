@@ -47,15 +47,7 @@ list_charges <- function(mode = c("test", "live"), limit = 10L) {
     abort("`resps_data()` requires the {vctrs} package to be installed.")
   }
 
-  resps_successes_dat <-
-    resps |>
-    resps_successes() |>
-    resps_data(
-      function(resp) {
-        out <- resp_body_json(resp, simplifyVector = TRUE)
-        out[["data"]]
-      }
-    )
+  resps_successes_dat <- xtr_data(resps)
 
   dat <- as_tibble_if_inst(resps_successes_dat)
 
