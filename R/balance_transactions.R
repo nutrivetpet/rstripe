@@ -26,7 +26,7 @@
 #' @export
 fetch_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
   mode <- arg_match(mode, mode)
-  stopifnot(between(limit, 1L, 100L) || is.infinite(limit))
+  stopifnot((limit >= 1L && limit <= 100L) || is.infinite(limit))
 
   if (is.infinite(limit)) {
     limit <- 100L
@@ -143,7 +143,7 @@ fetch_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
   }
 
   unexpected_types <- setdiff(
-    unique(pull(dat, type)),
+    unique(dat[["type"]]),
     get_balance_transaction_types()
   )
 
