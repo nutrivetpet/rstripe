@@ -50,9 +50,7 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
 
   dat <- as_tibble_if_inst(resps_successes_dat)
 
-  resps_failures <-
-    resps |>
-    resps_failures()
+  resps_failures <- resps_failures(resps)
 
   if (length(resps_failures)) {
     errors <- sapply(
