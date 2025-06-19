@@ -5,6 +5,8 @@
 #' @param mode Character string specifying the API mode. Must be either "test"
 #'   for test mode or "live" for live mode. The API key will be automatically
 #'   retrieved based on this mode.
+#' @param limit Either a scalar between 1 and 100 or `Inf` to traverse all the
+#'   available data. 10 by default.
 #'
 #' @return A data frame (tibble if available) containing balance transaction
 #'   data.
