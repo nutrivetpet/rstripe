@@ -10,6 +10,17 @@ get_api_key <- function(mode = c("test", "live")) {
       class = "missing_api_key"
     )
   }
+  if (!grepl("^sk_(test|live)_", key)) {
+    abort(
+      sprintf(
+        "`STRIPE_API_KEY_%s` does not start with `%s`.",
+        toupper(mode),
+        switch(mode, test = "sk_test_", live = "sk_live_")
+      ),
+      class = "incorrect_api_key"
+    )
+  }
+
   key
 }
 
