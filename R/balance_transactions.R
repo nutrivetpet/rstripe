@@ -60,9 +60,7 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
       }
     )
 
-  if (is_installed("tibble")) {
-    dat <- tibble::as_tibble(resps_successes_dat)
-  }
+  dat <- as_tibble_if_inst(resps_successes_dat)
 
   resps_failures <-
     resps |>
