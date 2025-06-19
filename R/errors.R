@@ -1,5 +1,5 @@
 get_error_msg <- function(status) {
-  stopifnot(is_scalar_integer(status))
+  stopifnot(is_integerish(status))
   switch(
     as.character(status),
     "400" = "Bad Request: The request was unacceptable, often due to missing a required parameter.",

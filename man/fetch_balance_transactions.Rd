@@ -4,7 +4,7 @@
 \alias{fetch_balance_transactions}
 \title{Fetch Balance Transactions from Stripe API}
 \usage{
-fetch_balance_transactions(mode = c("test", "live"))
+fetch_balance_transactions(mode = c("test", "live"), limit = 10L)
 }
 \arguments{
 \item{mode}{Character string specifying the API mode. Must be either "test"

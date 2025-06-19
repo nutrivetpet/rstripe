@@ -22,35 +22,109 @@
 #' }
 #'
 #' @export
-fetch_balance_transactions <- function(mode = c("test", "live")) {
+fetch_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
   mode <- arg_match(mode, mode)
+  stopifnot(between(limit, 1L, 100L) || is.infinite(limit))
+
+  if (is.infinite(limit)) {
+    limit <- 100L
+  }
+
+  next_req <- function(resp, req) {
+    resp <- resp_body_json(resp, simplifyVector = TRUE)
+
+    has_more <- resp[["has_more"]]
+    if (is_null(has_more) || !is_scalar_logical(has_more)) {
+      abort(
+        "Response does not contain `has_more` or it has an unexpected type.",
+        class = "incorrect_has_more"
+      )
+    }
+
+    # has_more being FALSE does not mean that the current iteration does not
+    # contain data, I guess
+    dat <- resp[["data"]]
+    if (is_null(dat) || (!is.data.frame(dat) && !nrow(dat))) {
+      abort("Response returned empty data.", class = "empty_response")
+    }
+
+    if (has_more) {
+      last_id <- tail(dat, 1L)[["id"]]
+      # modify with new url
+      req_url_query(req, starting_after = last_id)
+    } else {
+      NULL
+    }
+  }
+
   api_key <- get_api_key(mode)
+  req <- build_req(
+    api_key,
+    endpoint = "balance_transactions",
+    limit
+  )
 
-  type <- NULL
+  resps <- req_perform_iterative(
+    req,
+    next_req = next_req,
+    max_reqs = Inf,
+    on_error = "return" # error objects are stored at the end
+  )
 
-  req <- build_req(api_key, endpoint = "balance_transactions")
+  if (!is_installed("vctrs")) {
+    abort("`resps_data()` requires the {vctrs} package to be installed.")
+  }
 
-  resp <- req_perform(req)
-
-  if (resp_is_error(resp)) {
-    status <- resp_status(resp)
-    msg <- get_error_msg(status)
-    abort(
-      msg,
-      class = c("stripe_api_error", paste0("stripe_", status, "_error"))
+  resps_successes_dat <-
+    resps |>
+    resps_successes() |>
+    resps_data(
+      function(resp) {
+        out <- resp_body_json(resp, simplifyVector = TRUE)
+        out[["data"]]
+      }
     )
-  }
-
-  resp_body <- resp_body_json(resp, simplifyVector = TRUE)
-
-  dat <- resp_body[["data"]]
-
-  if (is_null(dat) || (!is.data.frame(dat) && !nrow(dat))) {
-    abort("Response returned empty data.", class = "empty_response")
-  }
 
   if (rlang::is_installed("tibble")) {
-    dat <- tibble::as_tibble(dat)
+    dat <- tibble::as_tibble(resps_successes_dat)
+  }
+
+  resps_failures <-
+    resps |>
+    resps_failures()
+
+  if (length(resps_failures)) {
+    errors <- sapply(
+      # can return NULL
+      resps_failures,
+      `[[`,
+      "status"
+    )
+    statuses <- unlist(Filter(
+      function(x) is_scalar_integerish(x, finite = TRUE),
+      errors
+    ))
+
+    others <- Filter(
+      function(x) !is_scalar_integerish(x, finite = TRUE),
+      errors
+    )
+
+    if (length(statuses)) {
+      msgs <- vapply(
+        statuses,
+        \(x) get_error_msg(x),
+        FUN.VALUE = character(length(statuses))
+      )
+      abort(
+        c("API Error(s)!", set_names(msgs, "x")),
+        class = "stripe_api_error"
+      )
+    }
+
+    if (length(others)) {
+      abort("%s of non API related errors encountered.", length(others))
+    }
   }
 
   cols <- get_balance_transactions_cols()
@@ -81,16 +155,14 @@ fetch_balance_transactions <- function(mode = c("test", "live")) {
     )
   }
 
-  dat |>
-    mutate(
-      across(
-        all_of(cols[c(3, 9, 11)]),
-        ~ convert_stripe_amount_to_decimal(.x)
-      )
-    ) |>
-    mutate(
-      across(all_of(cols[c(4, 5)]), ~ lubridate::as_datetime(.x))
-    )
+  dat[["amount"]] <- convert_stripe_amount_to_decimal(dat[["amount"]])
+  dat[["fee"]] <- convert_stripe_amount_to_decimal(dat[["fee"]])
+  dat[["net"]] <- convert_stripe_amount_to_decimal(dat[["net"]])
+
+  dat[["available_on"]] <- lubridate::as_datetime(dat[["available_on"]])
+  dat[["created"]] <- lubridate::as_datetime(dat[["created"]])
+
+  dat
 }
 
 # do not change order

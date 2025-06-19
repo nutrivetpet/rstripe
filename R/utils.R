@@ -24,14 +24,16 @@ get_api_key <- function(mode = c("test", "live")) {
   key
 }
 
-build_req <- function(api_key, endpoint) {
+build_req <- function(api_key, endpoint, limit) {
   stopifnot(
     is_scalar_character(api_key),
-    is_scalar_character(endpoint)
+    is_scalar_character(endpoint),
+    is_scalar_integer(limit)
   )
 
   request("https://api.stripe.com/v1") |>
     req_url_path_append(endpoint) |>
+    req_url_query("limit" = limit) |>
     req_auth_basic(username = api_key, password = "")
 }
 
