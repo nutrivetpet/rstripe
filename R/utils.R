@@ -42,6 +42,6 @@ is_null <- function(x) {
 }
 
 convert_stripe_amount_to_decimal <- function(x) {
-  stopifnot(rlang::is_integer(x))
+  stopifnot(is_integer(x))
   x / 100L
 }

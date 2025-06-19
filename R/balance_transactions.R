@@ -87,7 +87,7 @@ fetch_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
       }
     )
 
-  if (rlang::is_installed("tibble")) {
+  if (is_installed("tibble")) {
     dat <- tibble::as_tibble(resps_successes_dat)
   }
 
