@@ -112,6 +112,27 @@ get_cols <- function(epoint) {
       "transfer_cancel",
       "transfer_failure",
       "transfer_refund"
+    ),
+    prices = c(
+      "id",
+      "object",
+      "active",
+      "billing_scheme",
+      "created",
+      "currency",
+      "custom_unit_amount",
+      "livemode",
+      "lookup_key",
+      "metadata",
+      "nickname",
+      "product",
+      "recurring",
+      "tax_behavior",
+      "tiers_mode",
+      "transform_quantity",
+      "type",
+      "unit_amount",
+      "unit_amount_decimal"
     )
   )
 }

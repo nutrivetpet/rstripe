@@ -4,7 +4,7 @@
 \alias{list_prices}
 \title{Fetch Prices from Stripe API}
 \usage{
-list_prices(mode, limit = 10L)
+list_prices(mode = c("test", "live"), limit = 10L)
 }
 \arguments{
 \item{mode}{Character string specifying the API mode. Must be either "test"

@@ -29,7 +29,7 @@ list_prices <- function(mode = c("test", "live"), limit = 10L) {
   check_missing_cols(colnames(dat), cols)
 
   dat[["unit_amount"]] <- convert_amt_to_decimal(dat[["unit_amount"]])
-  dat[["unit_amount_decimal"]] <- convert_amt_to_decimal(as.numeric(
+  dat[["unit_amount_decimal"]] <- convert_amt_to_decimal(as.integer(
     dat[[
       "unit_amount_decimal"
     ]]
