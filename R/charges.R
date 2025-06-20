@@ -23,7 +23,7 @@
 #' @export
 list_charges <- function(mode = c("test", "live"), limit = 10L) {
   mode <- arg_match(mode, mode)
-  stopifnot((limit >= 1L && limit <= 100L) || is.infinite(limit))
+  check_limit(limit)
 
   dat <- exec_api_call("charges", mode, limit)
 

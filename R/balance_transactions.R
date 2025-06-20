@@ -25,8 +25,8 @@
 #'
 #' @export
 list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
-  mode <- arg_match(mode, mode)
-  stopifnot((limit >= 1L && limit <= 100L) || is.infinite(limit))
+  check_mode(mode)
+  check_limit(limit)
 
   dat <- exec_api_call("balance_transactions", mode, limit)
 
