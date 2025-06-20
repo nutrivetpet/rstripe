@@ -20,7 +20,7 @@
 #' }
 #'
 #' @export
-list_customers <- function(mode, limit = 10L) {
+list_customers <- function(mode = c("test", "live"), limit = 10L) {
   check_mode(mode)
   check_limit(limit)
 
