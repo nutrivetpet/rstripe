@@ -38,7 +38,7 @@ list_charges <- function(mode = c("test", "live"), limit = 10L) {
     "amount_refunded"
   ]])
 
-  dat[["created"]] <- lubridate::date(lubridate::as_datetime(dat[["created"]]))
+  dat[["created"]] <- date(as_datetime(dat[["created"]]))
 
   dat
 }

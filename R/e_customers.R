@@ -29,6 +29,6 @@ list_customers <- function(mode = c("test", "live"), limit = 10L) {
   cols <- get_cols("customers")
   check_missing_cols(colnames(dat), cols)
 
-  dat[["created"]] <- lubridate::date(lubridate::as_datetime(dat[["created"]]))
+  dat[["created"]] <- date(as_datetime(dat[["created"]]))
   dat
 }

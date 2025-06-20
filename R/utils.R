@@ -14,3 +14,12 @@ as_tibble_if_inst <- function(dat) {
   }
   dat
 }
+
+as_datetime <- function(x, tz = "UTC") {
+  stopifnot(is_integer(x))
+  as.POSIXlt(x, tz)
+}
+
+date <- function(x) {
+  format(x, "%Y-%m-%d")
+}

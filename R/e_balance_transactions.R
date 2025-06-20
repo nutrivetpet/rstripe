@@ -52,10 +52,10 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
   dat[["fee"]] <- convert_amt_to_decimal(dat[["fee"]])
   dat[["net"]] <- convert_amt_to_decimal(dat[["net"]])
 
-  dat[["available_on"]] <- lubridate::date(lubridate::as_datetime(dat[[
+  dat[["available_on"]] <- date(as_datetime(dat[[
     "available_on"
   ]]))
-  dat[["created"]] <- lubridate::date(lubridate::as_datetime(dat[["created"]]))
+  dat[["created"]] <- date(as_datetime(dat[["created"]]))
 
   dat
 }

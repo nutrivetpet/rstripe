@@ -10,7 +10,6 @@ Description: Provides a R interface to interact with the Stripe API.
 License: MIT + file LICENSE
 Imports:
     httr2,
-    lubridate,
     rlang
 Suggests: 
     tibble

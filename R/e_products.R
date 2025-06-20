@@ -28,8 +28,8 @@ list_products <- function(mode = c("test", "live"), limit = 10L) {
   cols <- get_cols("products")
   check_missing_cols(colnames(dat), cols)
 
-  dat[["created"]] <- lubridate::date(lubridate::as_datetime(dat[["created"]]))
+  dat[["created"]] <- date(as_datetime(dat[["created"]]))
   dat
-  dat[["updated"]] <- lubridate::date(lubridate::as_datetime(dat[["updated"]]))
+  dat[["updated"]] <- date(as_datetime(dat[["updated"]]))
   dat
 }
