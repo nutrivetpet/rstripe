@@ -40,11 +40,11 @@ list_charges <- function(mode = c("test", "live"), limit = 10L) {
     )
   }
 
-  dat[["amount"]] <- convert_stripe_amount_to_decimal(dat[["amount"]])
-  dat[["amount_captured"]] <- convert_stripe_amount_to_decimal(dat[[
+  dat[["amount"]] <- convert_amt_to_decimal(dat[["amount"]])
+  dat[["amount_captured"]] <- convert_amt_to_decimal(dat[[
     "amount_captured"
   ]])
-  dat[["amount_refunded"]] <- convert_stripe_amount_to_decimal(dat[[
+  dat[["amount_refunded"]] <- convert_amt_to_decimal(dat[[
     "amount_refunded"
   ]])
 

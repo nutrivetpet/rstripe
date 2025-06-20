@@ -58,9 +58,9 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
     )
   }
 
-  dat[["amount"]] <- convert_stripe_amount_to_decimal(dat[["amount"]])
-  dat[["fee"]] <- convert_stripe_amount_to_decimal(dat[["fee"]])
-  dat[["net"]] <- convert_stripe_amount_to_decimal(dat[["net"]])
+  dat[["amount"]] <- convert_amt_to_decimal(dat[["amount"]])
+  dat[["fee"]] <- convert_amt_to_decimal(dat[["fee"]])
+  dat[["net"]] <- convert_amt_to_decimal(dat[["net"]])
 
   dat[["available_on"]] <- lubridate::date(lubridate::as_datetime(dat[[
     "available_on"

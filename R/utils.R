@@ -41,7 +41,7 @@ is_null <- function(x) {
   is.null(x)
 }
 
-convert_stripe_amount_to_decimal <- function(x) {
+convert_amt_to_decimal <- function(x) {
   stopifnot(is_integer(x))
   x / 100L
 }
