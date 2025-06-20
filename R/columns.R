@@ -133,6 +133,26 @@ get_cols <- function(epoint) {
       "type",
       "unit_amount",
       "unit_amount_decimal"
+    ),
+    products = c(
+      "id",
+      "object",
+      "active",
+      "created",
+      "default_price",
+      "description",
+      "images",
+      "marketing_features",
+      "livemode",
+      "metadata",
+      "name",
+      "package_dimensions",
+      "shippable",
+      "statement_descriptor",
+      "tax_code",
+      "unit_label",
+      "updated",
+      "url"
     )
   )
 }
