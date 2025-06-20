@@ -211,6 +211,27 @@ get_cols <- function(epoint) {
       "total_taxes",
       "transfer_data",
       "webhooks_delivered_at"
+    ),
+    invoiceitems = c(
+      "id",
+      "object",
+      "amount",
+      "currency",
+      "customer",
+      "date",
+      "description",
+      "discountable",
+      "discounts",
+      "invoice",
+      "livemode",
+      "metadata",
+      "parent",
+      "period",
+      "pricing",
+      "proration",
+      "quantity",
+      "tax_rates",
+      "test_clock"
     )
   )
 }
