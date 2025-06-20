@@ -22,7 +22,7 @@
 #'
 #' @export
 list_charges <- function(mode = c("test", "live"), limit = 10L) {
-  mode <- arg_match(mode, mode)
+  check_mode(mode)
   check_limit(limit)
 
   dat <- exec_api_call("charges", mode, limit)
