@@ -60,7 +60,7 @@ get_cols <- function(epoint) {
       "livemode",
       "metadata",
       "name",
-      "next_invoice_sequence",
+      # "next_invoice_sequence",
       "phone",
       "preferred_locales",
       "shipping",
