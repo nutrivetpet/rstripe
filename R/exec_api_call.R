@@ -1,16 +1,14 @@
 exec_api_call <- function(epoint, mode, limit) {
   api_key <- get_api_key(mode)
-  if (is.infinite(limit)) {
-    limit <- 100L
-  }
 
   req <- build_req(
     api_key,
     endpoint = epoint,
-    limit
+    limit = if (is.infinite(limit)) 100L else limit
   )
   # TODO: review, can we do it better?
   if (is.infinite(limit)) {
+    limit <- 100L
     resps <- req_perform_iterative(
       req,
       next_req = next_req,
