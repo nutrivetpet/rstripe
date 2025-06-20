@@ -27,8 +27,9 @@ pak::pak("nutrivetpet/striper")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Fetch all charges:
 
 ``` r
 library(striper)
+dat <- list_charges("test", limit = Inf)
 ```
