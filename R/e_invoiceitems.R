@@ -28,21 +28,6 @@ list_invoice_items <- function(mode = c("test", "live"), limit = 10L) {
   cols <- get_cols("invoiceitems")
   check_missing_cols(colnames(dat), cols)
 
-  unexpected_types <- setdiff(
-    unique(dat[["status"]]),
-    get_invoiceitems_status()
-  )
-
-  if (length(unexpected_types)) {
-    abort(
-      sprintf(
-        "The following status are missing from column `status`: %s.",
-        unexpected_types
-      ),
-      class = "missing_types"
-    )
-  }
-
   for (col in c(
     "amount",
     "unit_amount",
