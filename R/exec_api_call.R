@@ -21,6 +21,7 @@ exec_api_call <- function(epoint, mode, limit) {
     resps_successes_dat <- xtr_data(resps)
     resps_failures <- resps_failures(resps)
     throw_errors(resps_failures)
+
     dat <- as_tibble_if_inst(resps_successes_dat)
   } else {
     resp <- req_perform(req)
@@ -33,7 +34,12 @@ exec_api_call <- function(epoint, mode, limit) {
       )
     }
     resp_body <- resp_body_json(resp, simplifyVector = TRUE)
-    dat <- as_tibble_if_inst(resp_body[["data"]])
+    dat <- resp_body[["data"]]
+    if (is_null(dat) || (!is.data.frame(dat) && !nrow(dat))) {
+      abort("Response returned empty data.", class = "empty_response")
+    }
+
+    dat <- as_tibble_if_inst(dat)
   }
 
   dat
