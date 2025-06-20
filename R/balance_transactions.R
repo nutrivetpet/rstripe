@@ -28,31 +28,7 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
   mode <- arg_match(mode, mode)
   stopifnot((limit >= 1L && limit <= 100L) || is.infinite(limit))
 
-  if (is.infinite(limit)) {
-    limit <- 100L
-  }
-
-  api_key <- get_api_key(mode)
-  req <- build_req(
-    api_key,
-    endpoint = "balance_transactions",
-    limit
-  )
-
-  resps <- req_perform_iterative(
-    req,
-    next_req = next_req,
-    max_reqs = Inf,
-    on_error = "return" # error objects are stored at the end
-  )
-
-  resps_successes_dat <- xtr_data(resps)
-
-  dat <- as_tibble_if_inst(resps_successes_dat)
-
-  resps_failures <- resps_failures(resps)
-
-  throw_errors(resps_failures)
+  dat <- exec_api_call("balance_transactions", mode, limit)
 
   cols <- get_balance_transactions_cols()
   missing_cols <- setdiff(
