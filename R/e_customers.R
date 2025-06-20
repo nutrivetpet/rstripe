@@ -26,35 +26,9 @@ list_customers <- function(mode, limit = 10L) {
 
   dat <- exec_api_call("customers", mode, limit)
 
-  cols <- get_balance_transactions_cols()
+  cols <- get_cols("customers")
   check_missing_cols(colnames(dat), cols)
 
   dat[["created"]] <- lubridate::date(lubridate::as_datetime(dat[["created"]]))
   dat
-}
-
-get_customers_cols <- function() {
-  c(
-    "id",
-    "object",
-    "address",
-    "balance",
-    "created",
-    "currency",
-    "default_source",
-    "delinquent",
-    "description",
-    "email",
-    "invoice_prefix",
-    "invoice_settings",
-    "livemode",
-    "metadata",
-    "name",
-    "next_invoice_sequence",
-    "phone",
-    "preferred_locales",
-    "shipping",
-    "tax_exempt",
-    "test_clock"
-  )
 }

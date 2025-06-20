@@ -27,7 +27,7 @@ list_charges <- function(mode = c("test", "live"), limit = 10L) {
 
   dat <- exec_api_call("charges", mode, limit)
 
-  cols <- get_charges_cols()
+  cols <- get_cols("charges")
   check_missing_cols(colnames(dat), cols)
 
   dat[["amount"]] <- convert_amt_to_decimal(dat[["amount"]])
@@ -41,50 +41,4 @@ list_charges <- function(mode = c("test", "live"), limit = 10L) {
   dat[["created"]] <- lubridate::date(lubridate::as_datetime(dat[["created"]]))
 
   dat
-}
-
-get_charges_cols <- function() {
-  c(
-    "id",
-    "object",
-    "amount",
-    "amount_captured",
-    "amount_refunded",
-    "application",
-    "application_fee",
-    "application_fee_amount",
-    "balance_transaction",
-    "billing_details",
-    "calculated_statement_descriptor",
-    "captured",
-    "created",
-    "currency",
-    "customer",
-    "description",
-    "disputed",
-    "failure_balance_transaction",
-    "failure_code",
-    "failure_message",
-    "fraud_details",
-    "livemode",
-    "metadata",
-    "on_behalf_of",
-    "outcome",
-    "paid",
-    "payment_intent",
-    "payment_method",
-    "payment_method_details",
-    "receipt_email",
-    "receipt_number",
-    "receipt_url",
-    "refunded",
-    "review",
-    "shipping",
-    "source_transfer",
-    "statement_descriptor",
-    "statement_descriptor_suffix",
-    "status",
-    "transfer_data",
-    "transfer_group"
-  )
 }

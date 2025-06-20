@@ -30,7 +30,7 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
 
   dat <- exec_api_call("balance_transactions", mode, limit)
 
-  cols <- get_balance_transactions_cols()
+  cols <- get_cols("balance_transactions")
   check_missing_cols(colnames(dat), cols)
 
   unexpected_types <- setdiff(
@@ -60,28 +60,6 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
   dat
 }
 
-# do not change order
-get_balance_transactions_cols <- function() {
-  c(
-    "id",
-    "object",
-    "amount",
-    "available_on",
-    "created",
-    "currency",
-    "description",
-    "exchange_rate",
-    "fee",
-    "fee_details",
-    "net",
-    "reporting_category",
-    "source",
-    "status",
-    "type"
-  )
-}
-
-# do not change order
 get_balance_transaction_types <- function() {
   c(
     "adjustment",
