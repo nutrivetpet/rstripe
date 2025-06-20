@@ -3,5 +3,6 @@
 export(list_balance_transactions)
 export(list_charges)
 export(list_customers)
+export(list_prices)
 import(httr2)
 import(rlang)
