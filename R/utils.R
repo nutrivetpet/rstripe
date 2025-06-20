@@ -21,5 +21,5 @@ as_datetime <- function(x, tz = "UTC") {
 }
 
 date <- function(x) {
-  format(x, "%Y-%m-%d")
+  as.Date(format(x, "%Y-%m-%d"))
 }
