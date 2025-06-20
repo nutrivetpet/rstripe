@@ -31,17 +31,7 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
   dat <- exec_api_call("balance_transactions", mode, limit)
 
   cols <- get_balance_transactions_cols()
-  missing_cols <- setdiff(
-    cols,
-    colnames(dat)
-  )
-
-  if (length(missing_cols)) {
-    abort(
-      sprintf("The following columns are missing: %s.", missing_cols),
-      class = "missing_columns"
-    )
-  }
+  check_missing_cols(colnames(dat), cols)
 
   unexpected_types <- setdiff(
     unique(dat[["type"]]),

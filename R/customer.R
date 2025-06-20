@@ -27,7 +27,6 @@ list_customers <- function(mode, limit = 10L) {
   dat <- exec_api_call("customers", mode, limit)
 
   cols <- get_balance_transactions_cols()
-
   check_missing_cols(colnames(dat), cols)
 
   dat[["created"]] <- lubridate::date(lubridate::as_datetime(dat[["created"]]))

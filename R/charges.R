@@ -28,17 +28,7 @@ list_charges <- function(mode = c("test", "live"), limit = 10L) {
   dat <- exec_api_call("charges", mode, limit)
 
   cols <- get_charges_cols()
-  missing_cols <- setdiff(
-    cols,
-    colnames(dat)
-  )
-
-  if (length(missing_cols)) {
-    abort(
-      sprintf("The following columns are missing: %s.", missing_cols),
-      class = "missing_columns"
-    )
-  }
+  check_missing_cols(colnames(dat), cols)
 
   dat[["amount"]] <- convert_amt_to_decimal(dat[["amount"]])
   dat[["amount_captured"]] <- convert_amt_to_decimal(dat[[
