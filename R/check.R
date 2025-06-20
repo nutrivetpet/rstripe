@@ -10,7 +10,10 @@ check_missing_cols <- function(x, truth) {
   missing <- setdiff(truth, x)
   if (length(missing)) {
     abort(
-      sprintf("The following columns are missing: %s.", missing),
+      sprintf(
+        "The following columns are missing: %s.",
+        paste0(missing, collapse = ", ")
+      ),
       class = "missing_columns"
     )
   }
