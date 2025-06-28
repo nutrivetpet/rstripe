@@ -29,7 +29,6 @@ list_products <- function(mode = c("test", "live"), limit = 10L) {
   check_missing_cols(colnames(dat), cols)
 
   dat[["created"]] <- date(as_datetime(dat[["created"]]))
-  dat
   dat[["updated"]] <- date(as_datetime(dat[["updated"]]))
   dat
 }
