@@ -1,46 +1,58 @@
 exec_api_call <- function(epoint, mode, limit) {
   api_key <- get_api_key(mode)
 
-  req <- build_req(
-    api_key,
-    endpoint = epoint,
-    limit = if (is.infinite(limit)) 100L else limit
-  )
-  # TODO: review, can we do it better?
   if (is.infinite(limit)) {
-    limit <- 100L
-    resps <- req_perform_iterative(
-      req,
-      next_req = next_req,
-      max_reqs = Inf,
-      on_error = "return" # error objects are stored at the end
-    )
-
-    resps_successes_dat <- xtr_data(resps)
-    resps_failures <- resps_failures(resps)
-    throw_errors(resps_failures)
-
-    dat <- as_tibble_if_inst(resps_successes_dat)
+    exec_paginated_call(api_key, epoint)
   } else {
-    resp <- req_perform(req)
-    if (resp_is_error(resp)) {
-      status <- resp_status(resp)
-      msg <- get_error_msg(status)
-      abort(
-        msg,
-        class = c("stripe_api_error", paste0("stripe_", status, "_error"))
-      )
-    }
-    resp_body <- resp_body_json(resp, simplifyVector = TRUE)
-    dat <- resp_body[["data"]]
-    if (is_null(dat) || (!is.data.frame(dat) && !nrow(dat))) {
-      abort("Response returned empty data.", class = "empty_response")
-    }
+    exec_single_call(api_key, epoint, limit)
+  }
+}
 
-    dat <- as_tibble_if_inst(dat)
+exec_paginated_call <- function(api_key, endpoint) {
+  req <- build_req(api_key, endpoint, limit = 100L)
+
+  resps <- req_perform_iterative(
+    req,
+    next_req = next_req,
+    max_reqs = Inf,
+    on_error = "return"
+  )
+
+  resps_successes_dat <- xtr_data(resps)
+  resps_failures <- resps_failures(resps)
+  throw_errors(resps_failures)
+
+  as_tibble_if_inst(resps_successes_dat)
+}
+
+exec_single_call <- function(api_key, endpoint, limit) {
+  req <- build_req(api_key, endpoint, limit)
+  resp <- req_perform(req)
+
+  handle_single_response(resp)
+}
+
+handle_single_response <- function(resp) {
+  if (resp_is_error(resp)) {
+    status <- resp_status(resp)
+    msg <- get_error_msg(status)
+    abort(
+      msg,
+      class = c("stripe_api_error", paste0("stripe_", status, "_error"))
+    )
   }
 
-  dat
+  resp_body <- resp_body_json(resp, simplifyVector = TRUE)
+  dat <- resp_body[["data"]]
+
+  validate_response_data(dat)
+  as_tibble_if_inst(dat)
+}
+
+validate_response_data <- function(dat) {
+  if (is_null(dat) || (!is.data.frame(dat) && !nrow(dat))) {
+    abort("Response returned empty data.", class = "empty_response")
+  }
 }
 
 get_api_key <- function(mode = c("test", "live")) {
