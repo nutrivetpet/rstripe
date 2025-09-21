@@ -1,4 +1,4 @@
-Package: striper
+Package: rstripe
 Title: R Interface to the Stripe API
 Version: 0.0.0.9000
 Authors@R: 

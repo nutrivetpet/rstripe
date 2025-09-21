@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# striper
+# rstripe
 
 <!-- badges: start -->
 
@@ -10,7 +10,7 @@ has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 <!-- badges: end -->
 
-The goal of striper is to interact with the [Stripe
+The goal of rstripe is to interact with the [Stripe
 API](https://docs.stripe.com/api), from R.
 
 It is an independent, community-developed R package for
@@ -19,10 +19,10 @@ Stripe).
 
 ## Installation
 
-You can install the development version of striper like so:
+You can install the development version of rstripe like so:
 
 ``` r
-pak::pak("nutrivetpet/striper")
+pak::pak("nutrivetpet/rstripe")
 ```
 
 ## Example
@@ -30,6 +30,6 @@ pak::pak("nutrivetpet/striper")
 Fetch all charges:
 
 ``` r
-library(striper)
+library(rstripe)
 dat <- list_charges("test", limit = Inf)
 ```
