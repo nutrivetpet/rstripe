@@ -8,6 +8,8 @@ Description: Provides a R interface to interact with the Stripe API.
     resources such as transactions, customers, products, and
     subscriptions.
 License: MIT + file LICENSE
+Depends:
+    R (>= 4.1.0)
 Imports:
     httr2,
     rlang
