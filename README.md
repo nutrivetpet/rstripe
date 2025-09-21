@@ -25,11 +25,58 @@ You can install the development version of rstripe like so:
 pak::pak("nutrivetpet/rstripe")
 ```
 
+## Getting Started
+
+### API Key Setup
+
+The package requires environment variables for API authentication:
+
+- `STRIPE_API_KEY_TEST` for test mode operations
+- `STRIPE_API_KEY_LIVE` for live mode operations
+
+Set these in your `.Renviron` file with:
+
+``` r
+# pak::pak("usethis")
+usethis::edit_r_environ()
+```
+
+Don’t forget to restart R afterwards.
+
 ## Example
 
-Fetch all charges:
+### Current API Coverage
+
+The package currently provides limited but useful coverage of the Stripe
+API. You can fetch data from these Stripe resources:
 
 ``` r
 library(rstripe)
-dat <- list_charges("test", limit = Inf)
+
+# Fetch charges (payments)
+charges <- list_charges("test", limit = 10)
+
+# Fetch customers
+customers <- list_customers("test", limit = 10)
+
+# Fetch products from your catalog
+products <- list_products("test", limit = 10)
+
+# Fetch pricing information
+prices <- list_prices("test", limit = 10)
+
+# Fetch invoices
+invoices <- list_invoices("test", limit = 10)
+
+# Fetch invoice line items
+invoice_items <- list_invoice_items("test", limit = 10)
+
+# Fetch balance transactions
+balance_transactions <- list_balance_transactions("test", limit = 10)
+
+# For unlimited results, use limit = Inf
+all_charges <- list_charges("test", limit = Inf)
 ```
+
+All functions support both `"test"` and `"live"` modes, and return data
+as data frames (tibbles if the tibble package is installed).
