@@ -1,13 +1,17 @@
 Package: rstripe
-Title: R Interface to the Stripe API
+Title: Unofficial R Interface to the Stripe API
 Version: 0.0.0.9000
-Authors@R: 
-    person("Andrea", "Ranzato", , "andrea@nutrivetpet.com", role = c("aut", "cre"))
+Authors@R: c(
+    person("Andrea", "Ranzato", , "andrea@nutrivetpet.com", role = c("aut", "cre")),
+    person("nutrivetpet Srls", role = c("cph", "fnd"))
+  )
 Description: Provides a R interface to interact with the Stripe API.
     Includes functions for fetching and processing various Stripe
-    resources such as transactions, customers, products, and
-    subscriptions.
+    resources. This package is not created by or affiliated with Stripe.
 License: MIT + file LICENSE
+URL: https://nutrivetpet.github.io/rstripe,
+    https://github.com/nutrivetpet/rstripe
+BugReports: https://github.com/nutrivetpet/rstripe/issues
 Depends:
     R (>= 4.1.0)
 Imports:
