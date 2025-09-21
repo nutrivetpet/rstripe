@@ -7,6 +7,10 @@ test_that("exec_api_call() works", {
   dat <- exec_api_call("invoices", mode = "test", limit = 1L)
   expect_s3_class(dat, "data.frame")
   expect_equal(nrow(dat), 1L)
+
+  dat_inf <- exec_api_call("invoices", mode = "test", limit = Inf)
+  expect_s3_class(dat_inf, "data.frame")
+  expect_gt(nrow(dat_inf), 1L)
 })
 
 test_that("build_req() works", {
