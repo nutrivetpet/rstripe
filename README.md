@@ -53,30 +53,42 @@ API. You can fetch data from these Stripe resources:
 ``` r
 library(rstripe)
 
+# Create a client (uses STRIPE_API_KEY_TEST from your environment)
+client <- rstripe("test")
+
 # Fetch charges (payments)
-charges <- list_charges("test", limit = 10)
+charges <- list_charges(client, limit = 10)
 
 # Fetch customers
-customers <- list_customers("test", limit = 10)
+customers <- list_customers(client, limit = 10)
 
 # Fetch products from your catalog
-products <- list_products("test", limit = 10)
+products <- list_products(client, limit = 10)
 
 # Fetch pricing information
-prices <- list_prices("test", limit = 10)
+prices <- list_prices(client, limit = 10)
 
 # Fetch invoices
-invoices <- list_invoices("test", limit = 10)
+invoices <- list_invoices(client, limit = 10)
 
 # Fetch invoice line items
-invoice_items <- list_invoice_items("test", limit = 10)
+invoice_items <- list_invoice_items(client, limit = 10)
 
 # Fetch balance transactions
-balance_transactions <- list_balance_transactions("test", limit = 10)
+balance_transactions <- list_balance_transactions(client, limit = 10)
+
+# Filter balance transactions by date range
+recent_transactions <- list_balance_transactions(
+  client,
+  limit = 10,
+  created_gte = as.Date("2025-01-01"),
+  created_lte = as.Date("2025-12-31")
+)
 
 # For unlimited results, use limit = Inf
-all_charges <- list_charges("test", limit = Inf)
+all_charges <- list_charges(client, limit = Inf)
 ```
 
-All functions support both `"test"` and `"live"` modes, and return data
-as data frames (tibbles if the tibble package is installed).
+All functions accept a `rstripe` client object (created with
+`rstripe("test")` or `rstripe("live")`), and return data as data frames
+(tibbles if the tibble package is installed).
