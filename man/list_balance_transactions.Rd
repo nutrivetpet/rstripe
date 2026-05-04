@@ -4,13 +4,24 @@
 \alias{list_balance_transactions}
 \title{Fetch Balance Transactions from Stripe API}
 \usage{
-list_balance_transactions(client, limit = 10L)
+list_balance_transactions(
+  client,
+  limit = 10L,
+  created_gte = NULL,
+  created_lte = NULL
+)
 }
 \arguments{
 \item{client}{A \code{Rstripe} object created by \code{\link[=rstripe]{rstripe()}}.}
 
 \item{limit}{Either a scalar between 1 and 100 or \code{Inf} to traverse all the
 available data. 10 by default.}
+
+\item{created_gte, created_lte}{Optional date filters. Accept either a
+\code{Date} object or a \code{"YYYY-MM-DD"} string. \code{created_gte} is inclusive
+and interpreted as 00:00:00 UTC on that date; \code{created_lte} is
+inclusive and interpreted as 23:59:59 UTC on that date. Pagination
+preserves the filter across pages.}
 }
 \value{
 A data frame (tibble if available) containing balance transaction

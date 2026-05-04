@@ -5,6 +5,11 @@
 #' @param client A `Rstripe` object created by [rstripe()].
 #' @param limit Either a scalar between 1 and 100 or `Inf` to traverse all the
 #'   available data. 10 by default.
+#' @param created_gte,created_lte Optional date filters. Accept either a
+#'   `Date` object or a `"YYYY-MM-DD"` string. `created_gte` is inclusive
+#'   and interpreted as 00:00:00 UTC on that date; `created_lte` is
+#'   inclusive and interpreted as 23:59:59 UTC on that date. Pagination
+#'   preserves the filter across pages.
 #'
 #' @family endpoints
 #'
@@ -22,10 +27,16 @@
 #' }
 #'
 #' @export
-list_balance_transactions <- function(client, limit = 10L) {
+list_balance_transactions <- function(
+  client,
+  limit = 10L,
+  created_gte = NULL,
+  created_lte = NULL
+) {
   check_limit(limit)
 
-  dat <- fetch(client, "balance_transactions", limit)
+  query <- build_created_filter(created_gte, created_lte)
+  dat <- fetch(client, "balance_transactions", limit, query = query)
 
   cols <- get_cols("balance_transactions")
   check_missing_cols(colnames(dat), cols)
