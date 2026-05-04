@@ -4,12 +4,26 @@
 \name{rstripe-package}
 \alias{rstripe}
 \alias{rstripe-package}
-\title{rstripe: R Interface to the Stripe API}
+\title{rstripe: Unofficial R Interface to the Stripe API}
 \description{
-Provides a R interface to interact with the Stripe API. Includes functions for fetching and processing various Stripe resources such as transactions, customers, products, and subscriptions.
+Provides a R interface to interact with the Stripe API. Includes functions for fetching and processing various Stripe resources. This package is not created by or affiliated with Stripe.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://nutrivetpet.github.io/rstripe}
+  \item \url{https://github.com/nutrivetpet/rstripe}
+  \item Report bugs at \url{https://github.com/nutrivetpet/rstripe/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Andrea Ranzato \email{andrea@nutrivetpet.com}
+
+Other contributors:
+\itemize{
+  \item nutrivetpet Srls [copyright holder, funder]
+}
 
 }
 \keyword{internal}
