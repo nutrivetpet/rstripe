@@ -4,7 +4,8 @@ test_that("list_balance_transactions() works", {
     nzchar(Sys.getenv("STRIPE_API_KEY_TEST")),
     "Stripe API Key is missing"
   )
-  dat <- list_balance_transactions(mode = "test", limit = 1L)
+  client <- rstripe("test")
+  dat <- list_balance_transactions(client, limit = 1L)
   expect_s3_class(dat, "data.frame")
   expect_equal(nrow(dat), 1L)
 })
@@ -15,13 +16,27 @@ test_that("list_balance_transactions() returns expected column names", {
     nzchar(Sys.getenv("STRIPE_API_KEY_TEST")),
     "Stripe API Key is missing"
   )
-  dat <- list_balance_transactions(mode = "test", limit = 1L)
+  client <- rstripe("test")
+  dat <- list_balance_transactions(client, limit = 1L)
   expect_named(
     dat,
     c(
-      "id", "object", "amount", "available_on", "balance_type", "created",
-      "currency", "description", "exchange_rate", "fee", "fee_details", "net",
-      "reporting_category", "source", "status", "type"
+      "id",
+      "object",
+      "amount",
+      "available_on",
+      "balance_type",
+      "created",
+      "currency",
+      "description",
+      "exchange_rate",
+      "fee",
+      "fee_details",
+      "net",
+      "reporting_category",
+      "source",
+      "status",
+      "type"
     ),
     ignore.order = FALSE
   )
@@ -33,20 +48,21 @@ test_that("list_balance_transactions() returns correct column types", {
     nzchar(Sys.getenv("STRIPE_API_KEY_TEST")),
     "Stripe API Key is missing"
   )
-  dat <- list_balance_transactions(mode = "test", limit = 1L)
-  expect_type(dat$id,                 "character")
-  expect_type(dat$object,             "character")
-  expect_type(dat$currency,           "character")
+  client <- rstripe("test")
+  dat <- list_balance_transactions(client, limit = 1L)
+  expect_type(dat$id, "character")
+  expect_type(dat$object, "character")
+  expect_type(dat$currency, "character")
   expect_type(dat$reporting_category, "character")
-  expect_type(dat$source,             "character")
-  expect_type(dat$status,             "character")
-  expect_type(dat$type,               "character")
-  expect_type(dat$amount,             "double")
-  expect_type(dat$fee,                "double")
-  expect_type(dat$net,                "double")
-  expect_s3_class(dat$available_on,   "Date")
-  expect_s3_class(dat$created,        "Date")
-  expect_type(dat$fee_details,        "list")
+  expect_type(dat$source, "character")
+  expect_type(dat$status, "character")
+  expect_type(dat$type, "character")
+  expect_type(dat$amount, "double")
+  expect_type(dat$fee, "double")
+  expect_type(dat$net, "double")
+  expect_s3_class(dat$available_on, "Date")
+  expect_s3_class(dat$created, "Date")
+  expect_type(dat$fee_details, "list")
 })
 
 test_that("list_balance_transactions() baseline fixture exists and is valid", {
@@ -56,11 +72,15 @@ test_that("list_balance_transactions() baseline fixture exists and is valid", {
     "Stripe API Key is missing"
   )
 
-  fixture_path <- testthat::test_path("fixtures", "balance_transactions_baseline.rds")
+  fixture_path <- testthat::test_path(
+    "fixtures",
+    "balance_transactions_baseline.rds"
+  )
 
   if (!file.exists(fixture_path)) {
-    dat <- list_balance_transactions(mode = "test", limit = 10L)
-    dir.create(dirname(fixture_path), recursive = TRUE)
+    client <- rstripe("test")
+    dat <- list_balance_transactions(client, limit = 10L)
+    dir.create(dirname(fixture_path), recursive = TRUE, showWarnings = FALSE)
     saveRDS(dat, fixture_path)
   }
 

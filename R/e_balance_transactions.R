@@ -2,11 +2,11 @@
 #'
 #' Retrieves balance transaction data from the Stripe API.
 #'
-#' @param mode Character string specifying the API mode. Must be either "test"
-#'   for test mode or "live" for live mode. The API key will be automatically
-#'   retrieved based on this mode.
+#' @param client A `Striper` object created by [rstripe()].
 #' @param limit Either a scalar between 1 and 100 or `Inf` to traverse all the
 #'   available data. 10 by default.
+#'
+#' @family endpoints
 #'
 #' @return A data frame (tibble if available) containing balance transaction
 #'   data.
@@ -16,19 +16,16 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Fetch test mode balance transactions
-#' test_transactions <- list_balance_transactions("test")
-#'
-#' # Fetch live mode balance transactions
-#' live_transactions <- list_balance_transactions("live")
+#' client <- rstripe("test")
+#' test_transactions <- list_balance_transactions(client)
+#' live_transactions <- list_balance_transactions(rstripe("live"))
 #' }
 #'
 #' @export
-list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
-  check_mode(mode)
+list_balance_transactions <- function(client, limit = 10L) {
   check_limit(limit)
 
-  dat <- exec_api_call("balance_transactions", mode, limit)
+  dat <- fetch(client, "balance_transactions", limit)
 
   cols <- get_cols("balance_transactions")
   check_missing_cols(colnames(dat), cols)
@@ -39,13 +36,7 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
   )
 
   if (length(unexpected_types)) {
-    abort(
-      sprintf(
-        "The following types are missing from column `type`: %s.",
-        unexpected_types
-      ),
-      class = "missing_types"
-    )
+    stripe_abort_missing_types(unexpected_types, "type")
   }
 
   dat[["amount"]] <- convert_amt_to_decimal(dat[["amount"]])
@@ -54,9 +45,7 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
 
   dat[["exchange_rate"]] <- as.double(dat[["exchange_rate"]])
 
-  dat[["available_on"]] <- date(as_datetime(dat[[
-    "available_on"
-  ]]))
+  dat[["available_on"]] <- date(as_datetime(dat[["available_on"]]))
   dat[["created"]] <- date(as_datetime(dat[["created"]]))
 
   dat

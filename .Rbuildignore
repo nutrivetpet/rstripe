@@ -4,3 +4,8 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^[\.]?air\.toml$
+^\.agents$
+^\.claude$
+^CLAUDE\.md$
+^skills-lock\.json$
+^transactions\.md$

@@ -6,24 +6,21 @@
 #'
 #' @return A data frame (tibble if available) containing invoices data.
 #'
-#' @section API Documentation: For more information about Stripe balance
-#'   transactions, see: \url{https://docs.stripe.com/api/invoices/}
+#' @section API Documentation: For more information about Stripe invoices, see:
+#' \url{https://docs.stripe.com/api/invoices/}
 #'
 #' @examples
 #' \dontrun{
-#' # Fetch test mode balance transactions
-#' test_invoices <- list_invoices("test")
-#'
-#' # Fetch live mode balance transactions
-#' live_invoices <- list_invoices("live")
+#' client <- rstripe("test")
+#' test_invoices <- list_invoices(client)
+#' live_invoices <- list_invoices(rstripe("live"))
 #' }
 #'
 #' @export
-list_invoices <- function(mode = c("test", "live"), limit = 10L) {
-  check_mode(mode)
+list_invoices <- function(client, limit = 10L) {
   check_limit(limit)
 
-  dat <- exec_api_call("invoices", mode, limit)
+  dat <- fetch(client, "invoices", limit)
 
   cols <- get_cols("invoices")
   check_missing_cols(colnames(dat), cols)
@@ -34,13 +31,7 @@ list_invoices <- function(mode = c("test", "live"), limit = 10L) {
   )
 
   if (length(unexpected_types)) {
-    abort(
-      sprintf(
-        "The following status are missing from column `status`: %s.",
-        unexpected_types
-      ),
-      class = "missing_types"
-    )
+    stripe_abort_missing_types(unexpected_types, "status")
   }
 
   for (col in c(

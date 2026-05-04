@@ -4,35 +4,30 @@
 \alias{list_customers}
 \title{Fetch Customers from Stripe API}
 \usage{
-list_customers(mode = c("test", "live"), limit = 10L)
+list_customers(client, limit = 10L)
 }
 \arguments{
-\item{mode}{Character string specifying the API mode. Must be either "test"
-for test mode or "live" for live mode. The API key will be automatically
-retrieved based on this mode.}
+\item{client}{A \code{Striper} object created by \code{\link[=rstripe]{rstripe()}}.}
 
 \item{limit}{Either a scalar between 1 and 100 or \code{Inf} to traverse all the
 available data. 10 by default.}
 }
 \value{
-A data frame (tibble if available) containing balance transaction
-data.
+A data frame (tibble if available) containing customers data.
 }
 \description{
 Retrieves customers data from the Stripe API.
 }
 \section{API Documentation}{
- For more information about Stripe balance
-transactions, see: \url{https://docs.stripe.com/api/customers/}
+ For more information about Stripe customers, see:
+\url{https://docs.stripe.com/api/customers/}
 }
 
 \examples{
 \dontrun{
-# Fetch test mode balance transactions
-test_customers <- list_customers("test")
-
-# Fetch live mode balance transactions
-live_customers <- list_customers("live")
+client <- rstripe("test")
+test_customers <- list_customers(client)
+live_customers <- list_customers(rstripe("live"))
 }
 
 }

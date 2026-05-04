@@ -4,12 +4,10 @@
 \alias{list_products}
 \title{Fetch Products from Stripe API}
 \usage{
-list_products(mode = c("test", "live"), limit = 10L)
+list_products(client, limit = 10L)
 }
 \arguments{
-\item{mode}{Character string specifying the API mode. Must be either "test"
-for test mode or "live" for live mode. The API key will be automatically
-retrieved based on this mode.}
+\item{client}{A \code{Striper} object created by \code{\link[=rstripe]{rstripe()}}.}
 
 \item{limit}{Either a scalar between 1 and 100 or \code{Inf} to traverse all the
 available data. 10 by default.}
@@ -21,17 +19,15 @@ A data frame (tibble if available) containing products data.
 Retrieves products data from the Stripe API.
 }
 \section{API Documentation}{
- For more information about Stripe balance
-transactions, see: \url{https://docs.stripe.com/api/products/}
+ For more information about Stripe products, see:
+\url{https://docs.stripe.com/api/products/}
 }
 
 \examples{
 \dontrun{
-# Fetch test mode balance transactions
-test_products <- list_products("test")
-
-# Fetch live mode balance transactions
-live_products <- list_products("live")
+client <- rstripe("test")
+test_products <- list_products(client)
+live_products <- list_products(rstripe("live"))
 }
 
 }

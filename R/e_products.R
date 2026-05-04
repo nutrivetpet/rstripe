@@ -6,24 +6,21 @@
 #'
 #' @return A data frame (tibble if available) containing products data.
 #'
-#' @section API Documentation: For more information about Stripe balance
-#'   transactions, see: \url{https://docs.stripe.com/api/products/}
+#' @section API Documentation: For more information about Stripe products, see:
+#' \url{https://docs.stripe.com/api/products/}
 #'
 #' @examples
 #' \dontrun{
-#' # Fetch test mode balance transactions
-#' test_products <- list_products("test")
-#'
-#' # Fetch live mode balance transactions
-#' live_products <- list_products("live")
+#' client <- rstripe("test")
+#' test_products <- list_products(client)
+#' live_products <- list_products(rstripe("live"))
 #' }
 #'
 #' @export
-list_products <- function(mode = c("test", "live"), limit = 10L) {
-  check_mode(mode)
+list_products <- function(client, limit = 10L) {
   check_limit(limit)
 
-  dat <- exec_api_call("products", mode, limit)
+  dat <- fetch(client, "products", limit)
 
   cols <- get_cols("products")
   check_missing_cols(colnames(dat), cols)

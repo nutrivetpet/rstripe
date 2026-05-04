@@ -1,20 +1,13 @@
 check_limit <- function(limit) {
-  stopifnot((limit >= 1L && limit <= 100L) || is.infinite(limit))
-}
-
-check_mode <- function(mode) {
-  arg_match(mode, c("test", "live"))
+  stopifnot(
+    (limit >= STRIPE_MIN_LIMIT && limit <= STRIPE_MAX_LIMIT) ||
+      is.infinite(limit)
+  )
 }
 
 check_missing_cols <- function(x, truth) {
   missing <- setdiff(truth, x)
   if (length(missing)) {
-    abort(
-      sprintf(
-        "The following columns are missing: %s.",
-        paste0(missing, collapse = ", ")
-      ),
-      class = "missing_columns"
-    )
+    stripe_abort_missing_columns(missing)
   }
 }

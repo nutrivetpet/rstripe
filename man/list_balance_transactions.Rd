@@ -4,12 +4,10 @@
 \alias{list_balance_transactions}
 \title{Fetch Balance Transactions from Stripe API}
 \usage{
-list_balance_transactions(mode = c("test", "live"), limit = 10L)
+list_balance_transactions(client, limit = 10L)
 }
 \arguments{
-\item{mode}{Character string specifying the API mode. Must be either "test"
-for test mode or "live" for live mode. The API key will be automatically
-retrieved based on this mode.}
+\item{client}{A \code{Striper} object created by \code{\link[=rstripe]{rstripe()}}.}
 
 \item{limit}{Either a scalar between 1 and 100 or \code{Inf} to traverse all the
 available data. 10 by default.}
@@ -28,11 +26,10 @@ transactions, see: \url{https://docs.stripe.com/api/balance_transactions/}
 
 \examples{
 \dontrun{
-# Fetch test mode balance transactions
-test_transactions <- list_balance_transactions("test")
-
-# Fetch live mode balance transactions
-live_transactions <- list_balance_transactions("live")
+client <- rstripe("test")
+test_transactions <- list_balance_transactions(client)
+live_transactions <- list_balance_transactions(rstripe("live"))
 }
 
 }
+\concept{endpoints}

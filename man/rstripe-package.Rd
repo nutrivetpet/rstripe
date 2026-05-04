@@ -2,7 +2,6 @@
 % Please edit documentation in R/striper-package.R
 \docType{package}
 \name{rstripe-package}
-\alias{rstripe}
 \alias{rstripe-package}
 \title{rstripe: Unofficial R Interface to the Stripe API}
 \description{

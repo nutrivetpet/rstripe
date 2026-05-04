@@ -4,12 +4,10 @@
 \alias{list_invoices}
 \title{Fetch Invoices from Stripe API}
 \usage{
-list_invoices(mode = c("test", "live"), limit = 10L)
+list_invoices(client, limit = 10L)
 }
 \arguments{
-\item{mode}{Character string specifying the API mode. Must be either "test"
-for test mode or "live" for live mode. The API key will be automatically
-retrieved based on this mode.}
+\item{client}{A \code{Striper} object created by \code{\link[=rstripe]{rstripe()}}.}
 
 \item{limit}{Either a scalar between 1 and 100 or \code{Inf} to traverse all the
 available data. 10 by default.}
@@ -21,17 +19,15 @@ A data frame (tibble if available) containing invoices data.
 Retrieves invoices data from the Stripe API.
 }
 \section{API Documentation}{
- For more information about Stripe balance
-transactions, see: \url{https://docs.stripe.com/api/invoices/}
+ For more information about Stripe invoices, see:
+\url{https://docs.stripe.com/api/invoices/}
 }
 
 \examples{
 \dontrun{
-# Fetch test mode balance transactions
-test_invoices <- list_invoices("test")
-
-# Fetch live mode balance transactions
-live_invoices <- list_invoices("live")
+client <- rstripe("test")
+test_invoices <- list_invoices(client)
+live_invoices <- list_invoices(rstripe("live"))
 }
 
 }

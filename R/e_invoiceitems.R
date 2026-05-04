@@ -6,24 +6,21 @@
 #'
 #' @return A data frame (tibble if available) containing invoices items data.
 #'
-#' @section API Documentation: For more information about Stripe balance
-#'   transactions, see: \url{https://docs.stripe.com/api/invoices/}
+#' @section API Documentation: For more information about Stripe invoice items,
+#'   see: \url{https://docs.stripe.com/api/invoiceitems/}
 #'
 #' @examples
 #' \dontrun{
-#' # Fetch test mode balance transactions
-#' test_invoices <- list_invoice_items("test")
-#'
-#' # Fetch live mode balance transactions
-#' live_invoices <- list_invoice_items("live")
+#' client <- rstripe("test")
+#' test_items <- list_invoice_items(client)
+#' live_items <- list_invoice_items(rstripe("live"))
 #' }
 #'
 #' @export
-list_invoice_items <- function(mode = c("test", "live"), limit = 10L) {
-  check_mode(mode)
+list_invoice_items <- function(client, limit = 10L) {
   check_limit(limit)
 
-  dat <- exec_api_call("invoiceitems", mode, limit)
+  dat <- fetch(client, "invoiceitems", limit)
 
   cols <- get_cols("invoiceitems")
   check_missing_cols(colnames(dat), cols)

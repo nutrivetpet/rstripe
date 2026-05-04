@@ -4,19 +4,16 @@
 \alias{list_charges}
 \title{Fetch Charges from Stripe API}
 \usage{
-list_charges(mode = c("test", "live"), limit = 10L)
+list_charges(client, limit = 10L)
 }
 \arguments{
-\item{mode}{Character string specifying the API mode. Must be either "test"
-for test mode or "live" for live mode. The API key will be automatically
-retrieved based on this mode.}
+\item{client}{A \code{Striper} object created by \code{\link[=rstripe]{rstripe()}}.}
 
 \item{limit}{Either a scalar between 1 and 100 or \code{Inf} to traverse all the
 available data. 10 by default.}
 }
 \value{
-A data frame (tibble if available) containing charges
-data.
+A data frame (tibble if available) containing charges data.
 }
 \description{
 Retrieves charges data from the Stripe API.
@@ -28,11 +25,9 @@ Retrieves charges data from the Stripe API.
 
 \examples{
 \dontrun{
-# Fetch test mode balance transactions
-test_charges <- list_charges("test")
-
-# Fetch live mode balance transactions
-live_charges <- list_charges("live")
+client <- rstripe("test")
+test_charges <- list_charges(client)
+live_charges <- list_charges(rstripe("live"))
 }
 
 }

@@ -6,33 +6,28 @@
 #'
 #' @return A data frame (tibble if available) containing prices data.
 #'
-#' @section API Documentation: For more information about Stripe balance
-#'   transactions, see: \url{https://docs.stripe.com/api/prices/}
+#' @section API Documentation: For more information about Stripe prices, see:
+#' \url{https://docs.stripe.com/api/prices/}
 #'
 #' @examples
 #' \dontrun{
-#' # Fetch test mode balance transactions
-#' test_prices <- list_prices("test")
-#'
-#' # Fetch live mode balance transactions
-#' live_prices <- list_prices("live")
+#' client <- rstripe("test")
+#' test_prices <- list_prices(client)
+#' live_prices <- list_prices(rstripe("live"))
 #' }
 #'
 #' @export
-list_prices <- function(mode = c("test", "live"), limit = 10L) {
-  check_mode(mode)
+list_prices <- function(client, limit = 10L) {
   check_limit(limit)
 
-  dat <- exec_api_call("prices", mode, limit)
+  dat <- fetch(client, "prices", limit)
 
   cols <- get_cols("prices")
   check_missing_cols(colnames(dat), cols)
 
   dat[["unit_amount"]] <- convert_amt_to_decimal(dat[["unit_amount"]])
   dat[["unit_amount_decimal"]] <- convert_amt_to_decimal(as.integer(
-    dat[[
-      "unit_amount_decimal"
-    ]]
+    dat[["unit_amount_decimal"]]
   ))
 
   dat[["created"]] <- date(as_datetime(dat[["created"]]))

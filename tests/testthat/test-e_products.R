@@ -4,7 +4,8 @@ test_that("list_products() works", {
     nzchar(Sys.getenv("STRIPE_API_KEY_TEST")),
     "Stripe API Key is missing"
   )
-  dat <- list_products(mode = "test", limit = 1L)
+  client <- rstripe("test")
+  dat <- list_products(client, limit = 1L)
   expect_s3_class(dat, "data.frame")
   expect_equal(nrow(dat), 1L)
 })

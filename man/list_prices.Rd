@@ -4,12 +4,10 @@
 \alias{list_prices}
 \title{Fetch Prices from Stripe API}
 \usage{
-list_prices(mode = c("test", "live"), limit = 10L)
+list_prices(client, limit = 10L)
 }
 \arguments{
-\item{mode}{Character string specifying the API mode. Must be either "test"
-for test mode or "live" for live mode. The API key will be automatically
-retrieved based on this mode.}
+\item{client}{A \code{Striper} object created by \code{\link[=rstripe]{rstripe()}}.}
 
 \item{limit}{Either a scalar between 1 and 100 or \code{Inf} to traverse all the
 available data. 10 by default.}
@@ -21,17 +19,15 @@ A data frame (tibble if available) containing prices data.
 Retrieves prices data from the Stripe API.
 }
 \section{API Documentation}{
- For more information about Stripe balance
-transactions, see: \url{https://docs.stripe.com/api/prices/}
+ For more information about Stripe prices, see:
+\url{https://docs.stripe.com/api/prices/}
 }
 
 \examples{
 \dontrun{
-# Fetch test mode balance transactions
-test_prices <- list_prices("test")
-
-# Fetch live mode balance transactions
-live_prices <- list_prices("live")
+client <- rstripe("test")
+test_prices <- list_prices(client)
+live_prices <- list_prices(rstripe("live"))
 }
 
 }

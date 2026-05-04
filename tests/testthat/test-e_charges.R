@@ -4,7 +4,8 @@ test_that("list_charges() works", {
     nzchar(Sys.getenv("STRIPE_API_KEY_TEST")),
     "Stripe API Key is missing"
   )
-  dat <- list_charges(mode = "test", limit = 1L)
+  client <- rstripe("test")
+  dat <- list_charges(client, limit = 1L)
   expect_s3_class(dat, "data.frame")
   expect_equal(nrow(dat), 1L)
 })

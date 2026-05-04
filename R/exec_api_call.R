@@ -1,15 +1,16 @@
-exec_api_call <- function(epoint, mode, limit) {
-  api_key <- get_api_key(mode)
+#' @noRd
+fetch <- S7::new_generic("fetch", "client")
 
+fetch_rstripe <- function(client, endpoint, limit, query = NULL) {
   if (is.infinite(limit)) {
-    exec_paginated_call(api_key, epoint)
+    exec_paginated_call(client, endpoint, query)
   } else {
-    exec_single_call(api_key, epoint, limit)
+    exec_single_call(client, endpoint, limit, query)
   }
 }
 
-exec_paginated_call <- function(api_key, endpoint) {
-  req <- build_req(api_key, endpoint, limit = 100L)
+exec_paginated_call <- function(client, endpoint, query = NULL) {
+  req <- build_req(client, endpoint, limit = STRIPE_MAX_LIMIT, query = query)
 
   resps <- req_perform_iterative(
     req,
@@ -25,21 +26,15 @@ exec_paginated_call <- function(api_key, endpoint) {
   as_tibble_if_inst(resps_successes_dat)
 }
 
-exec_single_call <- function(api_key, endpoint, limit) {
-  req <- build_req(api_key, endpoint, limit)
+exec_single_call <- function(client, endpoint, limit, query = NULL) {
+  req <- build_req(client, endpoint, limit, query = query)
   resp <- req_perform(req)
-
   handle_single_response(resp)
 }
 
 handle_single_response <- function(resp) {
   if (resp_is_error(resp)) {
-    status <- resp_status(resp)
-    msg <- get_error_msg(status)
-    abort(
-      msg,
-      class = c("stripe_api_error", paste0("stripe_", status, "_error"))
-    )
+    stripe_abort_api_error(resp_status(resp))
   }
 
   resp_body <- resp_body_json(resp, simplifyVector = TRUE)
@@ -51,53 +46,14 @@ handle_single_response <- function(resp) {
 
 validate_response_data <- function(dat) {
   if (is_null(dat) || (!is.data.frame(dat) && !nrow(dat))) {
-    abort("Response returned empty data.", class = "empty_response")
+    stripe_abort_empty_response()
   }
-}
-
-get_api_key <- function(mode = c("test", "live")) {
-  mode <- arg_match(mode)
-  key <- Sys.getenv(paste0("STRIPE_API_KEY_", toupper(mode)))
-  if (!nzchar(key)) {
-    abort(
-      sprintf(
-        "Cannot find env. var. `STRIPE_API_KEY_%s`.",
-        toupper(mode)
-      ),
-      class = "missing_api_key"
-    )
-  }
-  if (!grepl("^sk_(test|live)_", key)) {
-    abort(
-      sprintf(
-        "`STRIPE_API_KEY_%s` does not start with `%s`.",
-        toupper(mode),
-        switch(mode, test = "sk_test_", live = "sk_live_")
-      ),
-      class = "incorrect_api_key"
-    )
-  }
-
-  key
-}
-
-build_req <- function(api_key, endpoint, limit) {
-  stopifnot(
-    is_scalar_character(api_key),
-    is_scalar_character(endpoint),
-    is_scalar_integer(limit)
-  )
-
-  request("https://api.stripe.com/v1") |>
-    req_url_path_append(endpoint) |>
-    req_url_query("limit" = limit) |>
-    req_auth_basic(username = api_key, password = "")
 }
 
 xtr_data <- function(resps) {
-  stopifnot(is.list(resps)) # TODO: more checks
+  stopifnot(is.list(resps))
   if (!is_installed("vctrs")) {
-    abort("`resps_data()` requires the {vctrs} package to be installed.")
+    stripe_abort("`resps_data()` requires the {vctrs} package to be installed.")
   }
   successes <- resps_successes(resps)
   resps_data(
@@ -110,37 +66,25 @@ xtr_data <- function(resps) {
 }
 
 throw_errors <- function(resps_failures) {
-  if (length(resps_failures)) {
-    errors <- sapply(
-      # can return NULL
-      resps_failures,
-      `[[`,
-      "status"
-    )
-    statuses <- unlist(Filter(
-      function(x) is_scalar_integerish(x, finite = TRUE),
-      errors
-    ))
+  if (!length(resps_failures)) {
+    return(invisible())
+  }
 
-    others <- Filter(
-      function(x) !is_scalar_integerish(x, finite = TRUE),
-      errors
-    )
+  errors <- lapply(resps_failures, `[[`, "status")
+  statuses <- unlist(Filter(
+    function(x) is_scalar_integerish(x, finite = TRUE),
+    errors
+  ))
+  others <- Filter(
+    function(x) !is_scalar_integerish(x, finite = TRUE),
+    errors
+  )
 
-    if (length(statuses)) {
-      msgs <- vapply(
-        statuses,
-        \(x) get_error_msg(x),
-        FUN.VALUE = character(length(statuses))
-      )
-      abort(
-        c("API Error(s)!", set_names(msgs, "x")),
-        class = "stripe_api_error"
-      )
-    }
+  if (length(statuses)) {
+    stripe_abort_api_errors(statuses)
+  }
 
-    if (length(others)) {
-      abort("%s of non API related errors encountered.", length(others))
-    }
+  if (length(others)) {
+    stripe_abort(sprintf("%d non-API error(s) encountered.", length(others)))
   }
 }
