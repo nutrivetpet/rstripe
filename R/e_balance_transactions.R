@@ -2,7 +2,7 @@
 #'
 #' Retrieves balance transaction data from the Stripe API.
 #'
-#' @param client A `Striper` object created by [rstripe()].
+#' @param client A `Rstripe` object created by [rstripe()].
 #' @param limit Either a scalar between 1 and 100 or `Inf` to traverse all the
 #'   available data. 10 by default.
 #'

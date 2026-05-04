@@ -7,7 +7,7 @@
 list_charges(client, limit = 10L)
 }
 \arguments{
-\item{client}{A \code{Striper} object created by \code{\link[=rstripe]{rstripe()}}.}
+\item{client}{A \code{Rstripe} object created by \code{\link[=rstripe]{rstripe()}}.}
 
 \item{limit}{Either a scalar between 1 and 100 or \code{Inf} to traverse all the
 available data. 10 by default.}
