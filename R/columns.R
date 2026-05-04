@@ -72,6 +72,7 @@ get_cols <- function(epoint) {
       "object",
       "amount",
       "available_on",
+      "balance_type",
       "created",
       "currency",
       "description",
