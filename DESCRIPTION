@@ -1,6 +1,6 @@
 Package: rstripe
 Title: Unofficial R Interface to the Stripe API
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: c(
     person("Andrea", "Ranzato", , "andrea@nutrivetpet.com", role = c("aut", "cre")),
     person("nutrivetpet Srls", role = c("cph", "fnd"))
