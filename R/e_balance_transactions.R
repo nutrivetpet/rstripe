@@ -52,6 +52,8 @@ list_balance_transactions <- function(mode = c("test", "live"), limit = 10L) {
   dat[["fee"]] <- convert_amt_to_decimal(dat[["fee"]])
   dat[["net"]] <- convert_amt_to_decimal(dat[["net"]])
 
+  dat[["exchange_rate"]] <- as.double(dat[["exchange_rate"]])
+
   dat[["available_on"]] <- date(as_datetime(dat[[
     "available_on"
   ]]))
